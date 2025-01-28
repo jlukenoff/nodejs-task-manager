@@ -7,6 +7,7 @@ export interface Task {
   content: string;
   timestamp: Date;
   user: User;
+  position: number;
 }
 
 export type TaskInput = Pick<Task, "title" | "content">;

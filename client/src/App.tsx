@@ -40,22 +40,58 @@ function App() {
     await updateTask(task);
   };
 
+  console.log(tasks);
+
   return (
     <div className="flex justify-start items-center h-screen bg-gray-100 flex-col p-8">
       <ul className="w-1/3 mx-auto my-4">
-        {tasks.map((task) => (
-          <li key={task.id} className="p-2 my-2 bg-gray-200 rounded">
-            <input
-              type="checkbox"
-              className="mr-2"
-              checked={task.complete}
-              onChange={(e) =>
-                handleUpdateTask({ ...task, complete: e.target.checked })
-              }
-            />
-            <b>{task.title}</b>: {task.content}
-          </li>
-        ))}
+        {tasks
+          .sort((a, b) => a.position - b.position)
+          .map((task) => (
+            <li key={task.id} className="p-2 my-2 bg-gray-200 rounded">
+              <input
+                type="checkbox"
+                className="mr-2"
+                checked={task.complete}
+                onChange={(e) =>
+                  handleUpdateTask({ ...task, complete: e.target.checked })
+                }
+              />
+              <b>{task.title}</b>: {task.content}
+              <button
+                type="button"
+                className="ml-2"
+                onClick={() => {
+                  if (task.position === 0) {
+                    return;
+                  }
+                  tasks[task.position - 1].position = task.position;
+                  handleUpdateTask({
+                    ...task,
+                    position: task.position - 1,
+                  });
+                }}
+              >
+                Up
+              </button>
+              <button
+                type="button"
+                className="ml-2"
+                onClick={() => {
+                  if (task.position === tasks.length - 1) {
+                    return;
+                  }
+                  tasks[task.position + 1].position = task.position;
+                  handleUpdateTask({
+                    ...task,
+                    position: task.position + 1,
+                  });
+                }}
+              >
+                Down
+              </button>
+            </li>
+          ))}
       </ul>
       <button
         onClick={openModal}
